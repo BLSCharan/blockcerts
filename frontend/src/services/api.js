@@ -1,4 +1,4 @@
-const BASE_URL = "https://blockcerts.onrender.com";
+const BASE_URL = "https://blockcerts.onrender.com/api";
 
 export const uploadCertificate = async (formData) => {
 
