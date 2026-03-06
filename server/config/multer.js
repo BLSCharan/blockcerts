@@ -1,5 +1,11 @@
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
+
+// ✅ Ensure uploads folder exists (important for Render)
+if (!fs.existsSync("uploads")) {
+    fs.mkdirSync("uploads");
+}
 
 // Storage config
 const storage = multer.diskStorage({
@@ -21,9 +27,9 @@ const storage = multer.diskStorage({
 // Allow ONLY PDFs
 const fileFilter = (req, file, cb) => {
 
-    if(file.mimetype === "application/pdf"){
+    if (file.mimetype === "application/pdf") {
         cb(null, true);
-    }else{
+    } else {
         cb(new Error("Only PDF files allowed!"), false);
     }
 };

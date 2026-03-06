@@ -36,17 +36,17 @@ exports.issueCertificate = async (req, res) => {
 
         // Save in MongoDB
         const certificate = await Certificate.create({
-
             certificateId,
             studentName,
             course,
             year,
             cid
-
         });
 
-        // Delete local file
-        fs.unlinkSync(req.file.path);
+        // Delete local file safely
+        if (fs.existsSync(req.file.path)) {
+            fs.unlinkSync(req.file.path);
+        }
 
         res.status(201).json({
             success:true,
@@ -56,11 +56,11 @@ exports.issueCertificate = async (req, res) => {
 
     }catch(err){
 
-        console.error(err);
+        console.error("UPLOAD ERROR:", err);
 
         res.status(500).json({
             success:false,
-            message:"Server Error"
+            message: err.message
         });
     }
 };
@@ -98,11 +98,11 @@ exports.verifyCertificate = async (req, res) => {
 
     }catch(err){
 
-        console.error(err);
+        console.error("VERIFY ERROR:", err);
 
         res.status(500).json({
             success:false,
-            message:"Server Error"
+            message: err.message
         });
     }
 };
