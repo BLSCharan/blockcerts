@@ -18,4 +18,6 @@ const getApiUrl = () => {
 export const API_BASE_URL = getApiUrl();
 export const AUTH_API_URL = `${API_BASE_URL}/auth`;
 
-console.log('API URL:', API_BASE_URL);
+if (import.meta.env.DEV) {
+  console.log('API URL:', API_BASE_URL);
+}

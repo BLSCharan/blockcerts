@@ -6,16 +6,32 @@ const BASE_URL = AUTH_API_URL;
 const handleResponse = async (response) => {
   const text = await response.text();
 
+  // Log response details for debugging (development only)
+  if (import.meta.env.DEV) {
+    console.log('Response Status:', response.status);
+    console.log('Response Text:', text.substring(0, 500));
+    console.log('API URL being called:', BASE_URL);
+  }
+
   let data;
   try {
     data = JSON.parse(text);
   } catch (parseErr) {
-    console.error("Server returned non-JSON:", text);
-    throw new Error("Server error. Invalid response format.");
+    // Server returned non-JSON (HTML error page, etc)
+    console.error("Server returned non-JSON response:");
+    console.error("Status:", response.status);
+    console.error("Response:", text.substring(0, 1000));
+    
+    // Check if it's an HTML error page
+    if (text.includes('<!DOCTYPE') || text.includes('<html') || text.includes('<!doctype')) {
+      throw new Error(`Server error (${response.status}): ${text.includes('Cannot') ? 'Endpoint not found' : 'Invalid server response'}`);
+    }
+    
+    throw new Error(`Server error: ${text || 'No response'}`);
   }
 
   if (!response.ok) {
-    throw new Error(data.message || "Something went wrong");
+    throw new Error(data.message || `Server error: ${response.status}`);
   }
 
   return data;
