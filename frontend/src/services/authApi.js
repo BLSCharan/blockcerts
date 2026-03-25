@@ -1,16 +1,21 @@
 import { AUTH_API_URL } from './config';
 
-const BASE_URL = AUTH_API_URL;
+// Get BASE_URL dynamically to ensure it's always correct
+const getBaseUrl = () => {
+  return AUTH_API_URL;
+};
 
 // Helper function to safely parse response
 const handleResponse = async (response) => {
   const text = await response.text();
 
-  // Log response details for debugging (development only)
-  if (import.meta.env.DEV) {
-    console.log('Response Status:', response.status);
-    console.log('Response Text:', text.substring(0, 500));
-    console.log('API URL being called:', BASE_URL);
+  // Always log the URL being called for debugging
+  const baseUrl = getBaseUrl();
+  console.log('✓ Auth API called:', baseUrl);
+  console.log('Response Status:', response.status);
+  
+  if (response.status >= 400) {
+    console.error('API Error Response:', text.substring(0, 500));
   }
 
   let data;
@@ -18,13 +23,13 @@ const handleResponse = async (response) => {
     data = JSON.parse(text);
   } catch (parseErr) {
     // Server returned non-JSON (HTML error page, etc)
-    console.error("Server returned non-JSON response:");
+    console.error("❌ Server returned non-JSON response:");
     console.error("Status:", response.status);
-    console.error("Response:", text.substring(0, 1000));
+    console.error("Expected JSON but got:", text.substring(0, 500));
     
     // Check if it's an HTML error page
     if (text.includes('<!DOCTYPE') || text.includes('<html') || text.includes('<!doctype')) {
-      throw new Error(`Server error (${response.status}): ${text.includes('Cannot') ? 'Endpoint not found' : 'Invalid server response'}`);
+      throw new Error(`Server error (${response.status}): Invalid backend response. Check if API endpoint exists at ${getBaseUrl()}`);
     }
     
     throw new Error(`Server error: ${text || 'No response'}`);
@@ -39,7 +44,10 @@ const handleResponse = async (response) => {
 
 // Signup function
 export const signup = async (formData) => {
-  const response = await fetch(`${BASE_URL}/signup`, {
+  const baseUrl = getBaseUrl();
+  console.log('Calling signup at:', `${baseUrl}/signup`);
+  
+  const response = await fetch(`${baseUrl}/signup`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -52,7 +60,10 @@ export const signup = async (formData) => {
 
 // Login function
 export const login = async (email, password) => {
-  const response = await fetch(`${BASE_URL}/login`, {
+  const baseUrl = getBaseUrl();
+  console.log('Calling login at:', `${baseUrl}/login`);
+  
+  const response = await fetch(`${baseUrl}/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -65,7 +76,10 @@ export const login = async (email, password) => {
 
 // Get current user profile
 export const getCurrentUser = async (token) => {
-  const response = await fetch(`${BASE_URL}/me`, {
+  const baseUrl = getBaseUrl();
+  console.log('Calling getCurrentUser at:', `${baseUrl}/me`);
+  
+  const response = await fetch(`${baseUrl}/me`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -78,7 +92,10 @@ export const getCurrentUser = async (token) => {
 
 // Update user profile
 export const updateProfile = async (token, profileData) => {
-  const response = await fetch(`${BASE_URL}/update-profile`, {
+  const baseUrl = getBaseUrl();
+  console.log('Calling updateProfile at:', `${baseUrl}/update-profile`);
+  
+  const response = await fetch(`${baseUrl}/update-profile`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -92,7 +109,10 @@ export const updateProfile = async (token, profileData) => {
 
 // Forgot password function
 export const forgotPassword = async (email) => {
-  const response = await fetch(`${BASE_URL}/forgot-password`, {
+  const baseUrl = getBaseUrl();
+  console.log('Calling forgotPassword at:', `${baseUrl}/forgot-password`);
+  
+  const response = await fetch(`${baseUrl}/forgot-password`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -105,7 +125,10 @@ export const forgotPassword = async (email) => {
 
 // Reset password function (direct, no email link)
 export const resetPassword = async (email, password, confirmPassword) => {
-  const response = await fetch(`${BASE_URL}/reset-password`, {
+  const baseUrl = getBaseUrl();
+  console.log('Calling resetPassword at:', `${baseUrl}/reset-password`);
+  
+  const response = await fetch(`${baseUrl}/reset-password`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

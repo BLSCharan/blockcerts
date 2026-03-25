@@ -1,16 +1,21 @@
 import { API_BASE_URL } from './config';
 
-const BASE_URL = `${API_BASE_URL}/certificates`;
+// Get BASE_URL dynamically to ensure it's always correct
+const getBaseUrl = () => {
+  return `${API_BASE_URL}/certificates`;
+};
 
 // Helper function to safely parse response
 const handleResponse = async (response) => {
   const text = await response.text();
 
-  // Log response details for debugging (development only)
-  if (import.meta.env.DEV) {
-    console.log('Response Status:', response.status);
-    console.log('Response Text:', text.substring(0, 500));
-    console.log('API URL being called:', BASE_URL);
+  // Always log the URL being called for debugging
+  const baseUrl = getBaseUrl();
+  console.log('✓ Certificate API called. Base URL:', baseUrl);
+  console.log('Response Status:', response.status);
+  
+  if (response.status >= 400) {
+    console.error('API Error Response:', text.substring(0, 500));
   }
 
   let data;
@@ -18,13 +23,13 @@ const handleResponse = async (response) => {
     data = JSON.parse(text);
   } catch (parseErr) {
     // Server returned non-JSON (HTML error page, etc)
-    console.error("Server returned non-JSON response:");
+    console.error("❌ Server returned non-JSON response:");
     console.error("Status:", response.status);
-    console.error("Response:", text.substring(0, 1000));
+    console.error("Expected JSON but got:", text.substring(0, 500));
     
     // Check if it's an HTML error page
     if (text.includes('<!DOCTYPE') || text.includes('<html') || text.includes('<!doctype')) {
-      throw new Error(`Server error (${response.status}): ${text.includes('Cannot') ? 'Endpoint not found' : 'Invalid server response'}`);
+      throw new Error(`Server error (${response.status}): Invalid backend response. Check if API endpoint exists at ${getBaseUrl()}`);
     }
     
     throw new Error(`Server error: ${text || 'No response'}`);
@@ -39,7 +44,10 @@ const handleResponse = async (response) => {
 
 // Get all certificates by the logged-in user
 export const getCertificatesByUser = async (userId) => {
-  const response = await fetch(`${BASE_URL}/user/${userId}`, {
+  const baseUrl = getBaseUrl();
+  console.log('Calling getCertificatesByUser at:', `${baseUrl}/user/${userId}`);
+  
+  const response = await fetch(`${baseUrl}/user/${userId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -52,7 +60,10 @@ export const getCertificatesByUser = async (userId) => {
 
 // Get a specific certificate by ID
 export const getCertificateById = async (certificateId) => {
-  const response = await fetch(`${BASE_URL}/${certificateId}`, {
+  const baseUrl = getBaseUrl();
+  console.log('Calling getCertificateById at:', `${baseUrl}/${certificateId}`);
+  
+  const response = await fetch(`${baseUrl}/${certificateId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -64,7 +75,10 @@ export const getCertificateById = async (certificateId) => {
 
 // Verify a certificate
 export const verifyCertificate = async (certificateId) => {
-  const response = await fetch(`${BASE_URL}/verify/${certificateId}`, {
+  const baseUrl = getBaseUrl();
+  console.log('Calling verifyCertificate at:', `${baseUrl}/verify/${certificateId}`);
+  
+  const response = await fetch(`${baseUrl}/verify/${certificateId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -76,7 +90,10 @@ export const verifyCertificate = async (certificateId) => {
 
 // Delete a certificate
 export const deleteCertificate = async (certificateId) => {
-  const response = await fetch(`${BASE_URL}/${certificateId}`, {
+  const baseUrl = getBaseUrl();
+  console.log('Calling deleteCertificate at:', `${baseUrl}/${certificateId}`);
+  
+  const response = await fetch(`${baseUrl}/${certificateId}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -89,7 +106,10 @@ export const deleteCertificate = async (certificateId) => {
 
 // Issue a new certificate
 export const issueCertificate = async (certificateData) => {
-  const response = await fetch(`${BASE_URL}/issue`, {
+  const baseUrl = getBaseUrl();
+  console.log('Calling issueCertificate at:', `${baseUrl}/upload`);
+  
+  const response = await fetch(`${baseUrl}/upload`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
