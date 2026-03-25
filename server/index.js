@@ -8,7 +8,14 @@ connectDB();
 
 const app = express();
 
-app.use(cors());
+// CORS configuration - allow requests from any origin
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  credentials: false,
+  optionsSuccessStatus: 200
+}));
+
 app.use(express.json());
 
 // Auth Routes

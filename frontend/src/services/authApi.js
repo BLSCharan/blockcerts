@@ -1,4 +1,6 @@
-const BASE_URL = "http://localhost:5000/api/auth";
+import { AUTH_API_URL } from './config';
+
+const BASE_URL = AUTH_API_URL;
 
 // Helper function to safely parse response
 const handleResponse = async (response) => {
