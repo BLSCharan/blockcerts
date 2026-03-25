@@ -35,31 +35,48 @@ const features = [
 
 export function FeaturesSection() {
   return (
-    <section className="py-24">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16 space-y-4">
-          <h2 className="text-3xl md:text-4xl font-bold">
+    <section className="py-24 relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-accent/5" />
+      <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+      
+      <div className="container mx-auto px-4 relative z-10">
+        {/* Section Header */}
+        <div className="text-center mb-20 space-y-4 animate-slide-up">
+          <h2 className="text-3xl md:text-5xl font-bold leading-tight">
             Why Choose <span className="gradient-text">BlockCert?</span>
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Experience the future of credential verification with our cutting-edge blockchain technology.
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            Experience the future of credential verification with cutting-edge blockchain technology and enterprise-grade security
           </p>
         </div>
 
+        {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature, index) => (
-            <div
-              key={index}
-              className="glass-card rounded-xl p-6 space-y-4 hover:border-primary/50 transition-all duration-300 group animate-fade-in"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                <feature.icon className="w-6 h-6 text-primary-foreground" />
+          {features.map((feature, index) => {
+            const Icon = feature.icon;
+            return (
+              <div
+                key={index}
+                className="group glass-card rounded-xl p-8 space-y-4 hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 animate-fade-in hover:shadow-lg hover:shadow-primary/20"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                {/* Icon Container */}
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
+                    <Icon className="w-7 h-7 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold group-hover:text-primary transition-colors">{feature.title}</h3>
+                </div>
+                
+                {/* Description */}
+                <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+                
+                {/* Accent Line */}
+                <div className="h-1 w-0 bg-gradient-to-r from-primary to-accent group-hover:w-12 transition-all duration-300" />
               </div>
-              <h3 className="text-xl font-semibold">{feature.title}</h3>
-              <p className="text-muted-foreground">{feature.description}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

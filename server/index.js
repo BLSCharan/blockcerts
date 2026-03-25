@@ -11,6 +11,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Auth Routes
+app.use("/api/auth", require("./routes/authRoutes"));
+
+// Certificate Routes
 app.use("/api/certificates", require("./routes/certificateRoutes"));
 
 app.get("/", (req,res)=>{

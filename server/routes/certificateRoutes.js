@@ -2,22 +2,31 @@ const express = require("express");
 const router = express.Router();
 
 const upload = require("../config/multer");
+const { protect } = require("../middleware/authMiddleware");
 
 const {
     issueCertificate,
-    verifyCertificate
+    verifyCertificate,
+    getCertificatesByUser,
+    getCertificateById
 } = require("../controllers/certificateController");
 
 
-// Upload certificate
+// Upload certificate - PROTECTED (only authenticated organizations)
 router.post(
     "/upload",
+    protect,
     upload.single("certificate"),
     issueCertificate
 );
 
+// Get certificates by user - PROTECTED
+router.get("/user/:userId", protect, getCertificatesByUser);
 
-// Verify certificate
+// Get single certificate by ID - PUBLIC
+router.get("/:id", getCertificateById);
+
+// Verify certificate - PUBLIC
 router.get(
     "/verify/:id",
     verifyCertificate

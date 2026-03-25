@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { verifyCertificate } from "../services/api";
+import { CheckCircle } from "lucide-react";
 
 function VerifyCertificate(){
 
@@ -11,6 +12,15 @@ function VerifyCertificate(){
     const result = await verifyCertificate(certificateId);
 
     setCertificate(result);
+
+    // Store verified certificate ID in localStorage
+    if (result && result.success) {
+      const verifiedCerts = JSON.parse(localStorage.getItem("verifiedCertificates") || "[]");
+      if (!verifiedCerts.includes(certificateId)) {
+        verifiedCerts.push(certificateId);
+        localStorage.setItem("verifiedCertificates", JSON.stringify(verifiedCerts));
+      }
+    }
 
   };
 
@@ -41,6 +51,7 @@ function VerifyCertificate(){
               placeholder="Enter Certificate ID"
               className="flex-1 px-4 py-3 rounded-lg bg-white/10 border border-border/50 text-white placeholder-white/50 focus:outline-none focus:border-primary transition"
               onChange={(e)=>setCertificateId(e.target.value)}
+              value={certificateId}
               />
 
               <button
@@ -57,6 +68,13 @@ function VerifyCertificate(){
           {certificate && (
 
             <div className="mt-8 space-y-4 border-t border-border/30 pt-6">
+              
+              {certificate.success && (
+                <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-400" />
+                  <p className="text-green-400 font-semibold">Certificate Verified Successfully! ✓</p>
+                </div>
+              )}
 
               <div>
                 <p className="text-sm text-white/70">Student Name</p>

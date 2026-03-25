@@ -26,6 +26,12 @@ const certificateSchema = new mongoose.Schema({
         type:String   // from IPFS later
     },
 
+    issuedBy:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User",
+        required:true  // Only authenticated organizations can issue certificates
+    },
+
     issuedAt:{
         type:Date,
         default:Date.now

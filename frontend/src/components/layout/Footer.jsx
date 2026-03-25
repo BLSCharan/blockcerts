@@ -3,9 +3,9 @@ import { Shield } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="border-t border-border/50 glass-card mt-auto">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="border-t border-border/50 bg-gradient-to-b from-transparent to-primary/5 mt-auto">
+      <div className="container mx-auto px-4 py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           {/* Brand */}
           <div className="space-y-4">
             <Link to="/" className="flex items-center gap-2 group">
@@ -14,40 +14,50 @@ export function Footer() {
               </div>
               <span className="text-xl font-bold gradient-text">BlockCert</span>
             </Link>
-            <p className="text-muted-foreground text-sm">
+            <p className="text-white text-sm leading-relaxed">
               Securing the future of digital credentials through blockchain technology.
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-semibold mb-4 text-foreground">Product</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
+            <h3 className="font-semibold mb-4 text-white">Product</h3>
+            <ul className="space-y-3 text-sm">
               <li>
-                <Link to="/issue" className="hover:text-foreground transition">
+                <Link to="/issue" className="text-gray-300 hover:text-white transition">
                   Issue Certificate
                 </Link>
               </li>
               <li>
-                <Link to="/verify" className="hover:text-foreground transition">
+                <Link to="/verify" className="text-gray-300 hover:text-white transition">
                   Verify Certificate
                 </Link>
+              </li>
+              <li>
+                <a href="#" className="text-gray-300 hover:text-white transition">
+                  Features
+                </a>
               </li>
             </ul>
           </div>
 
           {/* Company */}
           <div>
-            <h3 className="font-semibold mb-4 text-foreground">Company</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
+            <h3 className="font-semibold mb-4 text-white">Company</h3>
+            <ul className="space-y-3 text-sm">
               <li>
-                <a href="#" className="hover:text-foreground transition">
-                  About
+                <a href="#" className="text-gray-300 hover:text-white transition">
+                  About Us
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-foreground transition">
+                <a href="#" className="text-gray-300 hover:text-white transition">
                   Blog
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-gray-300 hover:text-white transition">
+                  Contact
                 </a>
               </li>
             </ul>
@@ -55,26 +65,45 @@ export function Footer() {
 
           {/* Legal */}
           <div>
-            <h3 className="font-semibold mb-4 text-foreground">Legal</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
+            <h3 className="font-semibold mb-4 text-white">Legal</h3>
+            <ul className="space-y-3 text-sm">
               <li>
-                <a href="#" className="hover:text-foreground transition">
-                  Privacy
+                <a href="#" className="text-gray-300 hover:text-white transition">
+                  Privacy Policy
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-foreground transition">
-                  Terms
+                <a href="#" className="text-gray-300 hover:text-white transition">
+                  Terms of Service
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-gray-300 hover:text-white transition">
+                  Cookie Policy
                 </a>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-border/30 mt-8 pt-8">
-          <p className="text-center text-muted-foreground text-sm">
-            © 2024 BlockCert. All rights reserved. Powered by Blockchain Technology.
-          </p>
+        {/* Bottom Section */}
+        <div className="border-t border-border/30 pt-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-white text-sm">
+              © 2024 BlockCert. All rights reserved.
+            </p>
+            <div className="flex items-center gap-6">
+              <a href="#" className="text-gray-300 hover:text-white transition text-sm">
+                Twitter
+              </a>
+              <a href="#" className="text-gray-300 hover:text-white transition text-sm">
+                LinkedIn
+              </a>
+              <a href="#" className="text-gray-300 hover:text-white transition text-sm">
+                GitHub
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
