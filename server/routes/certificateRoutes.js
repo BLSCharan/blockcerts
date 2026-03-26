@@ -8,11 +8,17 @@ const {
     issueCertificate,
     verifyCertificate,
     getCertificatesByUser,
-    getCertificateById
+    getCertificateById,
+    deleteCertificate
 } = require("../controllers/certificateController");
 
 
-// Upload certificate - PROTECTED (only authenticated organizations)
+// =======================
+// 🔥 CERTIFICATE ROUTES
+// =======================
+
+
+// ✅ Upload certificate (Protected)
 router.post(
     "/upload",
     protect,
@@ -20,16 +26,25 @@ router.post(
     issueCertificate
 );
 
-// Get certificates by user - PROTECTED
+
+// ✅ Get certificates by user (Protected)
 router.get("/user/:userId", protect, getCertificatesByUser);
 
-// Get single certificate by ID - PUBLIC
+
+// ✅ Verify certificate (Public)
+router.get("/verify/:id", verifyCertificate);
+
+
+// 🔥 Delete certificate (Protected)
+// IMPORTANT: keep BEFORE "/:id"
+router.delete("/:id", (req, res, next) => {
+    console.log("🔥 DELETE ROUTE HIT");
+    next();
+}, protect, deleteCertificate);
+
+
+// ⚠️ Generic route (MUST BE LAST)
 router.get("/:id", getCertificateById);
 
-// Verify certificate - PUBLIC
-router.get(
-    "/verify/:id",
-    verifyCertificate
-);
 
 module.exports = router;
