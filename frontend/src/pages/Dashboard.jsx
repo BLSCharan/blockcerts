@@ -12,6 +12,8 @@ import {
   LogOut,
   TrendingUp,
   ActivitySquare,
+  Copy,
+  Check,
 } from "lucide-react";
 import { toast } from "react-toastify";
 import { getStoredUser, removeToken, removeUser } from "../services/authApi";
@@ -541,12 +543,20 @@ const CertificateModal = ({ certificate, onClose }) => {
 // Certificates List Component
 const CertificatesList = ({ certificates, onSelectCertificate, onVerificationUpdate }) => {
   const [verificationStatus, setVerificationStatus] = useState({});
+  const [copiedId, setCopiedId] = useState(null);
 
   useEffect(() => {
     // Get verified count from localStorage
     const verifiedCerts = JSON.parse(localStorage.getItem("verifiedCertificates") || "[]");
     onVerificationUpdate(verifiedCerts.length);
   }, []);
+
+  const handleCopyCertificateId = (id, event) => {
+    event.stopPropagation();
+    navigator.clipboard.writeText(id);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
 
   return (
     <div className="glass-card p-8 rounded-lg">
@@ -580,7 +590,20 @@ const CertificatesList = ({ certificates, onSelectCertificate, onVerificationUpd
                     {cert.studentName}
                   </h4>
                   <p className="text-gray-400 text-sm">{cert.course}</p>
-                  <p className="text-gray-500 text-xs mt-1 font-mono">{cert.cid.substring(0, 20)}...</p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <p className="text-gray-500 text-xs font-mono">{cert.cid.substring(0, 20)}...</p>
+                    <button
+                      onClick={(e) => handleCopyCertificateId(cert.cid, e)}
+                      className="p-1 hover:bg-white/10 rounded transition"
+                      title="Copy Certificate ID"
+                    >
+                      {copiedId === cert.cid ? (
+                        <Check className="w-4 h-4 text-green-400" />
+                      ) : (
+                        <Copy className="w-4 h-4 text-gray-500 hover:text-gray-400" />
+                      )}
+                    </button>
+                  </div>
                 </div>
                 <div className="text-right">
                   <p className="text-gray-400 text-sm">

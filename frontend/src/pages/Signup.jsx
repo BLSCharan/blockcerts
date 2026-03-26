@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Building, Mail, Lock, Phone, Globe, MapPin } from "lucide-react";
+import { Building, Mail, Lock, Phone, Globe, MapPin, Eye, EyeOff } from "lucide-react";
 import { toast } from "react-toastify";
 import { signup, setToken, setStoredUser } from "../services/authApi";
 
 function Signup() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
     organizationName: "",
     organizationRegistrationId: "",
@@ -92,7 +94,7 @@ function Signup() {
       setToken(result.token);
       setStoredUser(result.user);
 
-      toast.success("Registration successful! Welcome! 🎉");
+      toast.success("Registration successful! Welcome!");
 
       // Redirect to issue page
       setTimeout(() => {
@@ -179,11 +181,14 @@ function Signup() {
                   name="organizationType"
                   value={formData.organizationType}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/20 transition duration-300"
+                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/20 transition duration-300 appearance-none"
+                  style={{
+                    colorScheme: 'dark'
+                  }}
                 >
-                  <option value="" label="Select type" />
+                  <option value="" label="Select type" className="bg-slate-800 text-white" />
                   {organizationTypes.map((type) => (
-                    <option key={type} value={type} label={type} />
+                    <option key={type} value={type} label={type} className="bg-slate-800 text-white" />
                   ))}
                 </select>
               </div>
@@ -197,14 +202,23 @@ function Signup() {
                   <Lock className="w-4 h-4 text-accent" />
                   Password <span className="text-accent">*</span>
                 </label>
-                <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="Minimum 6 characters"
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/20 transition duration-300"
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder="Minimum 6 characters"
+                    className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/20 transition duration-300 pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/60 hover:text-white transition"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
               </div>
 
               {/* Confirm Password */}
@@ -213,14 +227,23 @@ function Signup() {
                   <Lock className="w-4 h-4 text-accent" />
                   Confirm Password <span className="text-accent">*</span>
                 </label>
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  placeholder="Re-enter password"
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/20 transition duration-300"
-                />
+                <div className="relative">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    placeholder="Re-enter password"
+                    className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/20 transition duration-300 pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/60 hover:text-white transition"
+                  >
+                    {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -331,7 +354,7 @@ function Signup() {
         {/* Info Box */}
         <div className="glass-card p-6 mt-6 animate-fade-in border border-primary/20 bg-primary/5">
           <p className="text-white/70 text-sm">
-            <span className="font-semibold text-primary">ℹ️ Required Fields:</span> Organization Name, Registration ID, Email, Password, and Organization Type are required to create an account.
+            <span className="font-semibold text-primary">Required Fields:</span> Organization Name, Registration ID, Email, Password, and Organization Type are required to create an account.
           </p>
         </div>
       </div>

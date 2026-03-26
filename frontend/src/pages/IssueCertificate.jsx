@@ -75,7 +75,7 @@ function IssueCertificate() {
       setFile(null);
       setFileName("");
 
-      toast.success("Certificate uploaded successfully! 🎉");
+      toast.success("Certificate uploaded successfully!");
 
     } catch (err) {
 
@@ -105,7 +105,7 @@ function IssueCertificate() {
         {user && (
           <div className="glass-card p-6 mb-8 border border-accent/30 bg-accent/5 animate-fade-in">
             <p className="text-white/70">
-              <span className="font-semibold text-accent">📋 Issuing Organization:</span> {user.organizationName}
+              <span className="font-semibold text-accent">Issuing Organization:</span> {user.organizationName}
             </p>
           </div>
         )}

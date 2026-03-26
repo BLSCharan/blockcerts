@@ -1,11 +1,18 @@
 import { useState } from "react";
 import { verifyCertificate } from "../services/api";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, Copy, Check } from "lucide-react";
 
 function VerifyCertificate(){
 
   const [certificateId,setCertificateId] = useState("");
   const [certificate,setCertificate] = useState(null);
+  const [copiedCertId, setCopiedCertId] = useState(false);
+
+  const handleCopyCertificateId = (id) => {
+    navigator.clipboard.writeText(id);
+    setCopiedCertId(true);
+    setTimeout(() => setCopiedCertId(false), 2000);
+  };
 
   const handleVerify = async () => {
 
@@ -95,6 +102,26 @@ function VerifyCertificate(){
                 <p className="text-lg font-semibold text-white">
                   {certificate.cert.year}
                 </p>
+              </div>
+
+              <div>
+                <p className="text-sm text-white/70 mb-2">Certificate ID</p>
+                <div className="flex items-center gap-2">
+                  <p className="text-lg font-semibold text-white font-mono break-all flex-1">
+                    {certificate.cert.certificateId}
+                  </p>
+                  <button
+                    onClick={() => handleCopyCertificateId(certificate.cert.certificateId)}
+                    className="p-2 hover:bg-white/10 rounded transition"
+                    title="Copy Certificate ID"
+                  >
+                    {copiedCertId ? (
+                      <Check className="w-5 h-5 text-green-400" />
+                    ) : (
+                      <Copy className="w-5 h-5 text-white/60 hover:text-white" />
+                    )}
+                  </button>
+                </div>
               </div>
 
               {certificate.ipfsLink && (
