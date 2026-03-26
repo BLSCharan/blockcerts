@@ -38,7 +38,7 @@ function Login() {
       setToken(result.token);
       setStoredUser(result.user);
 
-      toast.success("Login successful! 🎉");
+      toast.success("Login successful! ");
 
       // Redirect to issue page
       setTimeout(() => {
@@ -148,7 +148,7 @@ function Login() {
         {/* Info Box */}
         <div className="glass-card p-6 mt-6 animate-fade-in border border-accent/20 bg-accent/5">
           <p className="text-white/70 text-sm">
-            <span className="font-semibold text-accent">💡 Demo Login:</span> Use any registered organization email and password to login and issue certificates.
+            <span className="font-semibold text-accent"> Demo Login:</span> Use any registered organization email and password to login and issue certificates.
           </p>
         </div>
       </div>

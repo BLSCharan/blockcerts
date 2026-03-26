@@ -218,7 +218,7 @@ function IssueCertificate() {
             </div>
 
             <h2 className="text-2xl font-bold mb-2 gradient-text">
-              Certificate Issued Successfully! 🎉
+              Certificate Issued Successfully! 
             </h2>
 
             <p className="text-white/70 mb-6">

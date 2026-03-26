@@ -14,11 +14,12 @@ import {
   ActivitySquare,
   Copy,
   Check,
+  Trash2,
 } from "lucide-react";
 import { toast } from "react-toastify";
 import { getStoredUser, removeToken, removeUser } from "../services/authApi";
 import { getCurrentUser, updateProfile } from "../services/authApi";
-import { getCertificatesByUser } from "../services/certificateApi";
+import { getCertificatesByUser, deleteCertificate } from "../services/certificateApi";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -89,6 +90,10 @@ const Dashboard = () => {
     removeUser();
     navigate("/login");
     toast.success("Logged out successfully");
+  };
+
+  const handleCertificateDelete = (certificateId) => {
+    setCertificates(certificates.filter((cert) => cert._id !== certificateId));
   };
 
   const isProfileComplete =
@@ -200,6 +205,7 @@ const Dashboard = () => {
               certificates={recentCertificates}
               onSelectCertificate={setSelectedCertificate}
               onVerificationUpdate={setVerifiedCount}
+              onCertificateDelete={handleCertificateDelete}
             />
           </div>
 
@@ -541,9 +547,10 @@ const CertificateModal = ({ certificate, onClose }) => {
 };
 
 // Certificates List Component
-const CertificatesList = ({ certificates, onSelectCertificate, onVerificationUpdate }) => {
+const CertificatesList = ({ certificates, onSelectCertificate, onVerificationUpdate, onCertificateDelete }) => {
   const [verificationStatus, setVerificationStatus] = useState({});
   const [copiedId, setCopiedId] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
 
   useEffect(() => {
     // Get verified count from localStorage
@@ -556,6 +563,24 @@ const CertificatesList = ({ certificates, onSelectCertificate, onVerificationUpd
     navigator.clipboard.writeText(id);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
+  };
+
+  const handleDeleteCertificate = async (certificateId, event) => {
+    event.stopPropagation();
+    
+    if (window.confirm("Are you sure you want to delete this certificate? This action cannot be undone.")) {
+      setDeletingId(certificateId);
+      try {
+        await deleteCertificate(certificateId);
+        toast.success("Certificate deleted successfully!");
+        onCertificateDelete(certificateId);
+      } catch (error) {
+        console.error("Delete error:", error);
+        toast.error(error.message || "Failed to delete certificate");
+      } finally {
+        setDeletingId(null);
+      }
+    }
   };
 
   return (
@@ -602,6 +627,14 @@ const CertificatesList = ({ certificates, onSelectCertificate, onVerificationUpd
                       ) : (
                         <Copy className="w-4 h-4 text-gray-500 hover:text-gray-400" />
                       )}
+                    </button>
+                    <button
+                      onClick={(e) => handleDeleteCertificate(cert._id, e)}
+                      disabled={deletingId === cert._id}
+                      className="p-1 hover:bg-red-500/20 rounded transition disabled:opacity-50"
+                      title="Delete Certificate"
+                    >
+                      <Trash2 className="w-4 h-4 text-gray-500 hover:text-red-400" />
                     </button>
                   </div>
                 </div>
